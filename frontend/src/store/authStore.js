@@ -33,11 +33,13 @@ axios.defaults.withCredentials = true;
         set({ isLoading: true, error: null });
         try {
             const response = await axios.post(`${API_URL}/verify-email`, { code });
-            set({ user: response.data.user,token: response.data.token, isAuthenticated: true, isLoading: false });
+            set({ user: response.data.user, isAuthenticated: true, token:response.data.token, isLoading: false });
             return response.data;
         } catch (error) {
+            console.log(error.message);
             set({ error: error.response.data.message || "Error verifying email", isLoading: false });
             throw error;
+            
         }
     },
 
@@ -54,10 +56,10 @@ axios.defaults.withCredentials = true;
         }
     },
 
-    login: async (email, password) => {
+    login: async (email, password,recaptchaToken) => {
         set({ isLoading: true, error: null });
         try {
-            const response = await axios.post(`${API_URL}/login`, { email, password });
+            const response = await axios.post(`${API_URL}/login`, { email, password,recaptchaToken});
             set({ user: response.data.user,token: response.data.token ,isAuthenticated: true, isLoading: false,error: null });
         } catch (error) {
             set({ error: error.response.data.message || "Error Login", isLoading: false });

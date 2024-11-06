@@ -4,7 +4,8 @@ import { verifyToken } from '../middleware/verifyToken.js';
 import { verify } from 'crypto';
 import passport from '../Oauth/passport-setup.js';
 import {validateSignup,validateLogin,validateForgotPassword,validateResetPassword} from '../validators/auth.validator.js';
-
+import { verifyRole } from '../middleware/roleMiddleware.js';
+import { getAllUsers } from '../controllers/auth.controller.js';
 
 
 const router = express.Router();
@@ -40,6 +41,9 @@ router.post("/forgot-password",validateForgotPassword,forgotpassword);
 router.post("/reset-password/:token",validateResetPassword,resetpassword);
 
 router.post("/google", googleOAuth);
+
+router.get('/', verifyRole(['Admin']), getAllUsers);
+
 
 router.use((err, req, res, next) => {
     console.error(err);

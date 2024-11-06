@@ -2,8 +2,11 @@
 import { useState } from 'react';
 import api from '../services/api';
 import PropTypes from 'prop-types';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
-const CommentForm = ({ resourceId }) => {
+
+const CommentForm = ({ resourceId,fetchResources}) => {
   const [text, setText] = useState('');
  
   const token = localStorage.getItem('authToken'); // Retrieve the token from localStorage
@@ -17,15 +20,40 @@ const CommentForm = ({ resourceId }) => {
       await api.post('/resources/comment', { resourceId, text }, {
         headers: { Authorization: `Bearer ${token}` },
       });
+
       setText('');
       // Refresh comments or handle in parent component
+      fetchResources();
+
+      toast('👍 Comment added successfully!', {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      
+
     } catch (error) {
       console.error('Error adding comment:', error);
+      toast.error('👎 Error adding comment. Try again!', {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    
     }
   };
 
   return (
     <form onSubmit={handleSubmit} className="mt-4">
+
       <div className="mb-4">
         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="comment">
           Add Comment
@@ -49,6 +77,7 @@ const CommentForm = ({ resourceId }) => {
 };
 CommentForm.propTypes = {
   resourceId: PropTypes.string.isRequired,
+  fetchResources: PropTypes.func.isRequired,
 };
 
 export default CommentForm;

@@ -99,7 +99,7 @@ export const verifyEmail = async (req, res) => {
         .status(400)
         .json({
           sucess: false,
-          message: "Invalid or expired verification code",
+          message: "Invalid or expired verification code Haven't a user ",
         });
     }
 
@@ -107,6 +107,8 @@ export const verifyEmail = async (req, res) => {
     user.verificationToken = undefined;
     user.verificationTokenExpiresAt = undefined;
     await user.save();
+
+    const token = genarateTokenAndSetCookie(res, user);
 
     await sendWelcomeEmail(user.email, user.name);
     res.status(200).json({
@@ -125,7 +127,16 @@ export const verifyEmail = async (req, res) => {
 };
 
 export const login = async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password,recaptchaToken } = req.body;
+
+  const secretKey = process.env.RECAPTCHA_SECRET_KEY;
+  const verificationUrl = `https://www.google.com/recaptcha/api/siteverify?secret=${secretKey}&response=${recaptchaToken}`;
+  const responsed = await axios.post(verificationUrl);
+  const { success } = responsed.data;
+
+  if (!success) {
+    return res.status(400).json({ error: "ReCAPTCHA validation failed." });
+  }
 
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -345,5 +356,14 @@ export const googleOAuth = async (req, res) => {
       message: "Server error",
       error: error.message, // Include the error message for debugging
     });
+  }
+};
+
+export const getAllUsers = async (req, res) => {
+  try {
+    const users = await User.find().select('-password'); // Exclude password field
+    res.status(200).json(users);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
   }
 };

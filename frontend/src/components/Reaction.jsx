@@ -4,7 +4,7 @@ import api from '../services/api';
 import PropTypes from 'prop-types';
 import {useAuthStore} from '../store/authStore.js';
 
-const Reaction = ({ resourceId }) => {
+const Reaction = ({ resourceId,fetchResources}) => {
  
   const token = localStorage.getItem('authToken'); // Retrieve the token from localStorage
   const { user } = useAuthStore();
@@ -20,6 +20,7 @@ const Reaction = ({ resourceId }) => {
       await api.post('/resources/react', { resourceId,user,type }, {
         headers: { Authorization: `Bearer ${token}` },
       });
+      fetchResources();
       // Refresh reactions or handle in parent component
     } catch (error) {
       console.error('Error adding reaction:', error.response.data);
@@ -46,6 +47,7 @@ const Reaction = ({ resourceId }) => {
 
 Reaction.propTypes = {
   resourceId: PropTypes.string.isRequired,
+  fetchResources: PropTypes.func.isRequired,
 };
 
 export default Reaction;
