@@ -19,7 +19,7 @@ const PORT = process.env.PORT || 5000;
 const sessionSecret = crypto.randomBytes(64).toString('hex');
 
 
-app.use(cors({ origin: 'http://localhost:5173', credentials: true })); // allows us to make requests from the frontend
+app.use(cors({ origin: 'https://www.charindugamage.me', credentials: true })); // allows us to make requests from the frontend
 
 app.use(express.json()); // allows us to parse incoming json data
 
