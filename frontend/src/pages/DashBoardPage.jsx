@@ -8,6 +8,7 @@ const DashboardPage = () => {
   const { user, logout } = useAuthStore();
   const navigate = useNavigate();
   const token = user.token;
+  const role = user.role;
 
   useEffect(() => {
     if (token) {
@@ -17,6 +18,10 @@ const DashboardPage = () => {
 
   const handleNavigateToResources = () => {
     navigate("/resources");
+  };
+
+  const handleNavigateToLogs = () => {
+    navigate("/logs");
   };
 
   const handleLogout = () => {
@@ -91,6 +96,26 @@ const DashboardPage = () => {
           Go to Resources
         </motion.button>
       </motion.div>
+      {role === 'Admin' && (
+         <motion.div
+         initial={{ opacity: 0, y: 20 }}
+         animate={{ opacity: 1, y: 0 }}
+         transition={{ delay: 0.6 }}
+         className="mt-4"
+       >
+         <motion.button
+           whileHover={{ scale: 1.05 }}
+           whileTap={{ scale: 0.95 }}
+           onClick={handleNavigateToLogs}
+           className="w-full py-3 px-4 bg-gradient-to-r from-blue-500 to-blue-600 text-white 
+           font-bold rounded-lg shadow-lg hover:from-blue-600 hover:to-blue-700
+           focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-900 mb-4"
+         >
+           Go to logs
+         </motion.button>
+       </motion.div>
+        
+      )}
 
       <motion.div
         initial={{ opacity: 0, y: 20 }}

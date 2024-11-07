@@ -7,9 +7,10 @@ import session from 'express-session';
 import passport from 'passport';
 import crypto from 'crypto';
 import resourceRoutes from './routes/resource.routes.js';
-
-
+import morganMiddleware from './middleware/morganMiddleware.js';
+import logRoutes from './routes/log.routes.js';
 import { connectDB } from './db/connectDB.js';
+import responseTime from 'response-time';
 
 dotenv.config();
 
@@ -32,10 +33,13 @@ app.use(session({
 
 app.use(passport.initialize());
 app.use(passport.session())
+app.use(morganMiddleware); // Apply Morgan middleware
+app.use(responseTime());
 
 
 app.use('/api/auth', authRoutes);
 app.use('/api/resources', resourceRoutes); // Use the resource routes
+app.use('/api/logs', logRoutes);
 
 
 
