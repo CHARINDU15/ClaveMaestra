@@ -1,1 +1,0 @@
-select sum (BONUS_AMOUNT) from BONUS 

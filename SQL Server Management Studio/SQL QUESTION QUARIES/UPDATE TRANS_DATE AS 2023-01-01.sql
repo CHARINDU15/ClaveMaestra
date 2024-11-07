@@ -1,3 +1,0 @@
-update TRANSACTIONS
-set TRANS_DATE = '2023-01-01'
-where TRANS_DATE!='2023-01-01'
