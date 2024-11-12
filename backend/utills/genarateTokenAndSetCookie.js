@@ -12,6 +12,7 @@ export const genarateTokenAndSetCookie = (res, user) => {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'strict',
+        domain: process.env.NODE_ENV === 'production' ? '.charindugamage.me' : 'localhost', 
     };
 
     res.cookie('token', token, cookieOptions);

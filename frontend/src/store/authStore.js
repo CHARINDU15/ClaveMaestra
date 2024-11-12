@@ -5,7 +5,7 @@ import { app } from '../../../backend/Firebase/firebase'
 
 
 
-const API_URL = "http://209.97.170.236:5000/api/auth";
+const API_URL = "https://api.charindugamage.me:5000/api/auth";
 axios.defaults.withCredentials = true;
 
  export const useAuthStore = create((set) => ({
