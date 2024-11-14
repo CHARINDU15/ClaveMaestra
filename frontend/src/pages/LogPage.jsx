@@ -37,6 +37,7 @@ const LogPage = () => {
             page: page, // Send current page
             limit: logsPerPage, // Send number of records per page
           },
+          withCredentials: true, // Send cookies with the request
         });
 
         // Log the response to verify the data
